@@ -1,0 +1,25 @@
+{
+  "name": "one-post-a-day",
+  "version": "1.0.0",
+  "description": "Record a post from discord, once a day",
+  "main": "recordpost.js",
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0",
+    "moment-timezone": "^0.5.31"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ScreamingHawk/one-post-a-day.git"
+  },
+  "author": "Michael Standen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ScreamingHawk/one-post-a-day/issues"
+  },
+  "homepage": "https://github.com/ScreamingHawk/one-post-a-day#readme"
+}
