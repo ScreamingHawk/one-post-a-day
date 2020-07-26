@@ -1,6 +1,7 @@
 const moment = require('moment-timezone');
 const readpost = require('./readpost')
-const writepost = require('./writepost')
+const { writeEntry } = require('./writepost');
+const { commitEntry } = require('./commitpost');
 
 module.exports.run = () => {
 	try {
@@ -10,10 +11,11 @@ module.exports.run = () => {
 			entry.created = moment.utc(entry.created).tz("Pacific/Auckland")
 			entry.createdDate = entry.created.format("YYYY-MM-DD")
 			entry.createdTime = entry.created.format("HH:mm")
-			// Write to file
 
 			try {
-				writepost.writeEntry(entry)
+				// Record the post
+				await writeEntry(entry)
+				await commitEntry(entry)
 			} catch (err){
 				console.error(err)
 				process.exit(1)
