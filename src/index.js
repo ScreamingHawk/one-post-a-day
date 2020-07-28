@@ -4,7 +4,7 @@ const { writeEntry } = require('./writepost')
 const { commitEntry } = require('./commitpost')
 
 module.exports.run = () => {
-	console.debug("Starting logging")
+	console.debug(`Starting logging at ${moment().format()}`)
 	try {
 		readpost.init(async () => {
 			const entry = await readpost.getEntry()
@@ -19,8 +19,10 @@ module.exports.run = () => {
 
 			try {
 				// Record the post
-				await writeEntry(entry)
-				await commitEntry(entry)
+				const success = writeEntry(entry)
+				if (success){
+					await commitEntry(entry)
+				}
 			} catch (err){
 				console.error(err)
 				process.exit(1)
