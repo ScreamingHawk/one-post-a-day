@@ -1,12 +1,17 @@
-const moment = require('moment-timezone');
+const moment = require('moment-timezone')
 const readpost = require('./readpost')
-const { writeEntry } = require('./writepost');
-const { commitEntry } = require('./commitpost');
+const { writeEntry } = require('./writepost')
+const { commitEntry } = require('./commitpost')
 
 module.exports.run = () => {
+	console.debug("Starting logging")
 	try {
 		readpost.init(async () => {
 			const entry = await readpost.getEntry()
+			if (!entry){
+				// No result found. Oh well...
+				return
+			}
 			// Convert timezone to Auckland human friendly
 			entry.created = moment.utc(entry.created).tz("Pacific/Auckland")
 			entry.createdDate = entry.created.format("YYYY-MM-DD")
@@ -23,7 +28,6 @@ module.exports.run = () => {
 
 			// Done
 			console.info('Success :)')
-			process.exit()
 		})
 
 	} catch (err){
@@ -32,4 +36,12 @@ module.exports.run = () => {
 	}
 }
 
-module.exports.run()
+module.exports.cron = () => {
+	// Run every 24 hours
+	console.info("Running every 24 hours")
+	setInterval(module.exports.run, 86400000)
+	// Also run it right now
+	module.exports.run()
+}
+
+module.exports.cron()

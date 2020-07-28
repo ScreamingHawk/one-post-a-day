@@ -17,10 +17,12 @@ if (!token || !channelId || !userId){
 
 module.exports = {
 	init: callback => {
+		console.debug('Logging in to discord')
 		discord.once('ready', callback)
 		discord.login(token)
 	},
 	getEntry: async () => {
+		console.debug('Searching for posts')
 		// Search for posts in the past 24 hours.
 		const channel = discord.channels.cache.get(channelId)
 		// Filter it for first (latest) result from user
@@ -31,7 +33,7 @@ module.exports = {
 		if (message.createdTimestamp < yesterdayLimit){
 			// It's NOT today
 			console.warn('No message posted today')
-			process.exit(1)
+			return null
 		}
 		// Return it
 		return {
