@@ -1,5 +1,5 @@
 const git = require('simple-git')()
-const { indexPath } = require('./writepost')
+const { indexPath } = require('./file')
 
 module.exports.commitEntry = async entry => {
 	console.debug("Pushing it up")

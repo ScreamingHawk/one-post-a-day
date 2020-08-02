@@ -1,7 +1,7 @@
 const moment = require('moment-timezone')
-const readpost = require('./readpost')
-const { writeEntry } = require('./writepost')
-const { commitEntry } = require('./commitpost')
+const readpost = require('./discord')
+const { writeEntry } = require('./file')
+const { commitEntry } = require('./git')
 
 module.exports.run = () => {
 	console.debug(`Starting logging at ${moment().format()}`)
