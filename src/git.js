@@ -6,5 +6,5 @@ module.exports.commitEntry = async entry => {
 	await git.add('./posts/*')
 	await git.add(indexPath())
 	await git.commit(`${entry.updated ? 'Updated' : 'Added'} ${entry.createdDate}`)
-	//await git.push()
+	await git.push()
 }
