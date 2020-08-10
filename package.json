@@ -9,10 +9,13 @@
     "moment-timezone": "^0.5.31",
     "simple-git": "^2.15.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "ava": "^3.11.1"
+  },
   "scripts": {
     "start": "node src",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ava",
+    "test-watch": "ava --watch"
   },
   "repository": {
     "type": "git",

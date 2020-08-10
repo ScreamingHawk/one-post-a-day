@@ -1,32 +1,35 @@
 const moment = require('moment-timezone')
-const readpost = require('./discord')
-const { writeEntry } = require('./file')
+const { init, getEntry } = require('./discord')
+const { writeEntry, getEarliestMissingDate } = require('./file')
 const { commitEntry } = require('./git')
+
+const asyncForEach = async (arr, callback) => {
+	for (let i = 0; i < arr.length; i++) {
+		await callback(arr[i], i, arr)
+	}
+}
 
 module.exports.run = () => {
 	console.debug(`Starting logging at ${moment().format()}`)
 	try {
-		readpost.init(async () => {
-			const entry = await readpost.getEntry()
-			if (!entry){
+		init(async () => {
+			const entries = await getEntry(getEarliestMissingDate())
+			if (!entries){
 				// No result found. Oh well...
 				return
 			}
-			// Convert timezone to Auckland human friendly
-			entry.created = moment.utc(entry.created).tz("Pacific/Auckland")
-			entry.createdDate = entry.created.format("YYYY-MM-DD")
-			entry.createdTime = entry.created.format("HH:mm")
+			await asyncForEach(entries, async entry => {
+				// Convert timezone to Auckland human friendly
+				entry.created = moment.utc(entry.created).tz("Pacific/Auckland")
+				entry.createdDate = entry.created.format("YYYY-MM-DD")
+				entry.createdTime = entry.created.format("HH:mm")
 
-			try {
 				// Record the post
 				const success = writeEntry(entry)
 				if (success){
 					await commitEntry(entry)
 				}
-			} catch (err){
-				console.error(err)
-				process.exit(1)
-			}
+			})
 
 			// Done
 			console.info('Success :)')

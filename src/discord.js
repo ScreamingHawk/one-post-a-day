@@ -21,24 +21,27 @@ module.exports = {
 		discord.once('ready', callback)
 		discord.login(token)
 	},
-	getEntry: async () => {
+	getEntry: async until => {
+		// Search for posts until the given date
 		console.debug('Searching for posts')
-		// Search for posts in the past 24 hours.
+		if (!until){
+			// Default to yesterday
+			until = new Date().valueOf() - (24 * 60 * 60 * 1000)
+		} else {
+			until = until.valueOf()
+		}
 		const channel = discord.channels.cache.get(channelId)
-		// Filter it for first (latest) result from user
-		await channel.messages.fetch()
-		const message = channel.messages.cache.filter(m => m.author.id == userId).first()
-		// Confirm date
-		const yesterdayLimit = new Date().getTime() - (24 * 60 * 60 * 1000)
-		if (message.createdTimestamp < yesterdayLimit){
-			// It's NOT today
-			console.warn('No message posted today')
-			return null
+		await channel.messages.fetch({ limit: 1 })
+		// Loop until we have all the messages we need
+		while (channel.messages.cache.last().createdTimestamp > until){
+			await channel.messages.fetch({ limit: 1, before: channel.messages.cache.last().id })
 		}
-		// Return it
-		return {
-			created: message.createdTimestamp,
-			content: message.content,
-		}
+		// Strip messages to import parts
+		return channel.messages.cache.filter(m => m.author.id == userId).map(m =>
+			({
+				created: m.createdTimestamp,
+				content: m.content,
+			})
+			).reverse()
 	},
 }

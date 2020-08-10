@@ -1,13 +1,30 @@
 const fs = require('fs')
-const path = require('path');
+const path = require('path')
+const moment = require('moment')
 
-module.exports.filePath = entry => path.join(__dirname, '../posts', `${entry.createdDate}.json`)
+module.exports.dirPath = () => path.join(__dirname, '../posts')
+module.exports.filePath = entry => path.join(module.exports.dirPath(), `${entry.createdDate}.json`)
 module.exports.indexPath = () => path.join(__dirname, '../index.html')
 
 module.exports.readEntry = fname => {
 	if (fs.existsSync(fname)){
 		return JSON.parse(fs.readFileSync(fname))
 	}
+}
+
+module.exports.getEarliestMissingDate = () => {
+	let date = moment()
+	if (fs.readdirSync(module.exports.dirPath()).length === 0){
+		// Nothing stored. Use today
+		return date
+	}
+	// Check for files until we miss one
+	while (!fs.existsSync(module.exports.filePath({createdDate: date.format("YYYY-MM-DD")}))){
+		date.subtract(1, "days")
+	}
+	// We found the earliest stored date. Add a day to get earliest missing
+	date.add(1, "days")
+	return date
 }
 
 module.exports.writeEntry = entry => {
