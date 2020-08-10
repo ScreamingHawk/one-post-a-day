@@ -50,4 +50,4 @@ module.exports.cron = () => {
 	module.exports.run()
 }
 
-module.exports.cron()
+module.exports.run()
