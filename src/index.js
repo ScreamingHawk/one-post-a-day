@@ -1,7 +1,7 @@
 const moment = require('moment-timezone')
 const { init, getEntry } = require('./discord')
 const { writeEntry, getEarliestMissingDate } = require('./file')
-const { commitEntry } = require('./git')
+const { commitEntry, push } = require('./git')
 
 const asyncForEach = async (arr, callback) => {
 	for (let i = 0; i < arr.length; i++) {
@@ -32,6 +32,7 @@ module.exports.run = () => {
 			})
 
 			// Done
+			await push()
 			console.info('Success :)')
 		})
 
