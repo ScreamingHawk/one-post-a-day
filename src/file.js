@@ -53,7 +53,7 @@ module.exports.writeEntry = entry => {
 		split.pop()
 		index = split.join('\t\t\t')
 	}
-	index += `\t\t\t<section><h2>${entry.content}</h2><span>${entry.createdDate} ${entry.createdTime}</span></section>\r\n`
+	index += `\t\t\t<section><h2>${entry.content.replace(/\n/g, "<br/>")}</h2><span>${entry.createdDate} ${entry.createdTime}</span></section>\r\n`
 	fs.writeFileSync(indexPath, index)
 
 	return true
