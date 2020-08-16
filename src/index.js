@@ -9,7 +9,7 @@ const asyncForEach = async (arr, callback) => {
 	}
 }
 
-module.exports.run = () => {
+module.exports.run = callback => {
 	console.debug(`Starting logging at ${moment().format()}`)
 	try {
 		init(async () => {
@@ -34,6 +34,9 @@ module.exports.run = () => {
 			// Done
 			await push()
 			console.info('Success :)')
+			if (callback){
+				callback()
+			}
 		})
 
 	} catch (err){
@@ -50,4 +53,7 @@ module.exports.cron = () => {
 	module.exports.run()
 }
 
-module.exports.run()
+module.exports.run(() => {
+	console.info('Exiting...')
+	process.exit()
+})
