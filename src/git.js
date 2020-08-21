@@ -1,6 +1,11 @@
 const git = require('simple-git')()
 const { indexPath } = require('./file')
 
+module.exports.pull = async () => {
+	console.debug("Pulling ff only")
+	await git.pull('origin', 'master', {'--ff-only': null})
+}
+
 module.exports.commitEntry = async entry => {
 	console.debug("Committing entry")
 	await git.add('./posts/*')
