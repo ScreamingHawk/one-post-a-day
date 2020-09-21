@@ -24,6 +24,8 @@ module.exports.run = callback => {
 				entry.createdDate = entry.created.format("YYYY-MM-DD")
 				entry.createdTime = entry.created.format("HH:mm")
 
+				console.info(`Processing entry for ${entry.createdDate}`)
+
 				// Record the post
 				const success = writeEntry(entry)
 				if (success){
