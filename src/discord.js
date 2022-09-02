@@ -34,7 +34,7 @@ module.exports = {
 		await channel.messages.fetch({ limit: 1 })
 		// Loop until we have all the messages we need
 		while (channel.messages.cache.last().createdTimestamp > until){
-			await channel.messages.fetch({ limit: 1, before: channel.messages.cache.last().id })
+			await channel.messages.fetch({ limit: 25, before: channel.messages.cache.last().id })
 		}
 		// Strip messages to import parts
 		return channel.messages.cache.filter(m => m.author.id == userId).map(m =>
