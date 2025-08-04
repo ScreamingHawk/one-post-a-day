@@ -15,5 +15,5 @@ module.exports.commitEntry = async entry => {
 
 module.exports.push = async () => {
 	console.debug("Pushing it up")
-	await git.push()
+	await git.push('origin', 'master')
 }
