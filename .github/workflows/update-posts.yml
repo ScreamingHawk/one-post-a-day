@@ -1,0 +1,48 @@
+name: Update Posts
+
+on:
+  schedule:
+    # Run every day at 2 AM UTC (10 AM NZST)
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  update-posts:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0 # Fetch full history for git operations
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'yarn'
+    
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+    
+    - name: Configure Git
+      run: |
+        git config --global user.name "GitHub Action"
+        git config --global user.email "action@github.com"
+    
+    - name: Run update script
+      env:
+        DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+        DISCORD_CHANNEL: ${{ secrets.DISCORD_CHANNEL }}
+        DISCORD_USER: ${{ secrets.DISCORD_USER }}
+      run: yarn start
+    
+    - name: Push changes
+      run: |
+        # Check if there are any changes to commit
+        if git diff-index --quiet HEAD --; then
+          echo "No changes to commit"
+        else
+          echo "Changes detected, pushing to repository"
+          git push origin master
+        fi 
