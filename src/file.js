@@ -2,6 +2,8 @@ const fs = require('fs')
 const path = require('path')
 const moment = require('moment')
 
+const FONT_COUNT = 12
+
 module.exports.dirPath = () => path.join(__dirname, '../posts')
 module.exports.filePath = entry => path.join(module.exports.dirPath(), `${entry.createdDate}.json`)
 module.exports.indexPath = () => path.join(__dirname, '../index.html')
@@ -55,7 +57,7 @@ module.exports.writeEntry = entry => {
 		split.pop()
 		index = split.join('\t\t\t')
 	}
-	index += `\t\t\t<section class="font${randLimit(3) + 1}" style="background-color: hsla(${randLimit(360)}, 70%, 70%, 0.4)"><h2>${entry.content.replace(/\n/g, "<br/>")}</h2><span>${entry.createdDate} ${entry.createdTime}</span></section>\r\n`
+	index += `\t\t\t<section class="font${randLimit(FONT_COUNT) + 1}" style="background-color: hsla(${randLimit(360)}, 70%, 70%, 0.4)"><h2>${entry.content.replace(/\n/g, "<br/>")}</h2><span>${entry.createdDate} ${entry.createdTime}</span></section>\r\n`
 	fs.writeFileSync(indexPath, index)
 
 	return true
