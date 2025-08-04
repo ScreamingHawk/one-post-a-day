@@ -6,6 +6,13 @@ on:
   push:
     branches: ["master"]
 
+  # Triggered when update-posts workflow completes successfully
+  workflow_run:
+    workflows: ["Update Posts"]
+    types:
+      - completed
+    branches: ["master"]
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
