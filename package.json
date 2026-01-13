@@ -7,7 +7,7 @@
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
     "moment-timezone": "^0.5.31",
-    "simple-git": "^2.15.0"
+    "simple-git": "^3.5.0"
   },
   "devDependencies": {
     "ava": "^3.11.1"
