@@ -31,6 +31,8 @@ concurrency:
 jobs:
   # Single deploy job since we're just deploying
   deploy:
+    # A workflow_run event fires for every completion, including failures.
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
